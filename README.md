@@ -59,6 +59,16 @@ Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
 $ pod install
 ```
 
+### Using Swift Package Manager
+
+Swift Package Manager
+
+```swift
+dependencies: [
+    .package(url: "https://bitbucket.org/Healbe/healbe-public-ios-sdk.git", branch: "master")
+]
+```
+
 ### Configuring your app
 
 You should set **NSBluetoothAlwaysUsageDescription** and **NSBluetoothPeripheralUsageDescription** in your app's `Info.plist` for using BLE. Also, you can turn on using Bluetooth in background modes into **Signing & Capabilities** tab.
