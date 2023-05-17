@@ -1,0 +1,1596 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name HealbeSDK
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import Compression
+import CoreBluetooth
+import CoreData
+import Dispatch
+import Foundation
+@_exported import HealbeSDK
+import Network
+import SQLite3
+import Swift
+import SwiftUI
+import UIKit
+import _Concurrency
+import _StringProcessing
+open class AdditionalLogFilesStrategyBase : Swift.Hashable {
+  public init()
+  public static func == (lhs: HealbeSDK.AdditionalLogFilesStrategyBase, rhs: HealbeSDK.AdditionalLogFilesStrategyBase) -> Swift.Bool
+  open func prepareFiles() -> [Foundation.URL]
+  open func hash(into hasher: inout Swift.Hasher)
+  open func isEqual(object: HealbeSDK.AdditionalLogFilesStrategyBase) -> Swift.Bool
+  @objc deinit
+  open var hashValue: Swift.Int {
+    get
+  }
+}
+public struct BetSummary {
+  public struct BetLevelDuration : Swift.Hashable {
+    public let type: HealbeSDK.BetGSRLevel
+    public let value: Foundation.TimeInterval
+    public func getDuration(unit: Foundation.UnitDuration) -> Swift.Int
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: HealbeSDK.BetSummary.BetLevelDuration, b: HealbeSDK.BetSummary.BetLevelDuration) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let startDate: Foundation.Date
+  public let endDate: Foundation.Date
+  public let data: [HealbeSDK.BetData]
+  public let levelDurations: Swift.Set<HealbeSDK.BetSummary.BetLevelDuration>
+  public let maximumBetDateInterval: Foundation.DateInterval?
+  public func getLevelDuration(type: HealbeSDK.BetGSRLevel, unit: Foundation.UnitDuration) -> Swift.Int
+}
+public enum Availability {
+  case available
+  case notAvailable(HealbeSDK.HealbeError)
+  case notAvailableNow(HealbeSDK.HealbeError)
+}
+public struct BaseGoBeNotificationData : HealbeSDK.GoBeNotificationDataProtocol {
+  public let id: Swift.Int
+  public let timestamp: Swift.Int
+  public let timezone: Swift.Int
+  public let type: HealbeSDK.GoBeNotificationDataType
+  public let hasRead: Swift.Bool
+}
+extension HealbeSDK.BaseGoBeNotificationData : Swift.Equatable {
+  public static func == (a: HealbeSDK.BaseGoBeNotificationData, b: HealbeSDK.BaseGoBeNotificationData) -> Swift.Bool
+}
+public struct PulseData {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let heartRate: Swift.Int
+  public let minimumHeartRate: Swift.UInt
+  public let maximumHeartRate: Swift.UInt
+}
+public enum StatusCode : Swift.UInt {
+  case succeeded
+  case failed
+  case bodyTooShort
+  case bodyTooLong
+  case previousInProgress
+  case notSupported
+  public init?(rawValue: Swift.UInt)
+  public typealias RawValue = Swift.UInt
+  public var rawValue: Swift.UInt {
+    get
+  }
+}
+public struct AnxietyData {
+  public let startDate: Foundation.Date
+  public let endDate: Foundation.Date
+  public let anxietyLevel: Swift.Int
+}
+final public class Atomic<A> {
+  public init(_ value: A, targetQueue: Dispatch.DispatchQueue? = nil)
+  final public var value: A {
+    get
+  }
+  final public func mutate(_ transform: (inout A) -> Swift.Void)
+  @objc deinit
+}
+public struct UrgentGoBeNotificationData : Swift.Equatable {
+  public let type: HealbeSDK.UrgentGoBeNotificationDataType
+  public let timestamp: Foundation.Date
+  public static func == (a: HealbeSDK.UrgentGoBeNotificationData, b: HealbeSDK.UrgentGoBeNotificationData) -> Swift.Bool
+}
+public struct SleepEventNetwork : Swift.Codable {
+  public init(recordId: Swift.Int32, timestamp: Swift.Int32, timezoneOffset: Swift.Int32, eventType: Swift.UInt32, eventData: Swift.String, moduleID: Swift.Int64, sensorId: Swift.String = "")
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension HealbeSDK.SleepEventNetwork : Swift.Equatable {
+  public static func == (a: HealbeSDK.SleepEventNetwork, b: HealbeSDK.SleepEventNetwork) -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers public class NotificationDataConstants {
+  public static let pushNotificationEventType: Swift.UInt32
+  @objc deinit
+}
+public struct SleepRecommendation {
+  public let recommendedSleepDuration: Swift.UInt
+  public let baseSleepDuration: Swift.UInt
+  public let sleepStatsBased: Swift.UInt
+  public let activityBased: Swift.UInt
+  public let stressBased: Swift.UInt
+}
+public protocol Receivable {
+  init(gobeData: Foundation.Data) throws
+  static func objectByteSize() -> Swift.Int
+  static func isCorrect(cmd: Swift.UInt16) -> Swift.Bool
+  static func preprocessData(value: Foundation.Data) -> Foundation.Data
+}
+public struct ActivitySummary {
+  public let date: Foundation.Date
+  public let steps: Swift.UInt
+  public let distance: Swift.UInt
+  public let sitting: HealbeSDK.ActivitySummaryData
+  public let routine: HealbeSDK.ActivitySummaryData
+  public let walking: HealbeSDK.ActivitySummaryData
+  public let running: HealbeSDK.ActivitySummaryData
+  public let data: [HealbeSDK.ActivityData]
+}
+public enum SDKStatus {
+  case undefined
+  case notInited
+  case needAuthorize
+  case profileNeedFill
+  case validNewUser
+  case validOldUser
+  case networkConnectionRequired
+  public static func == (a: HealbeSDK.SDKStatus, b: HealbeSDK.SDKStatus) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum GoBeState {
+  case connecting
+  case connected
+  case disconnecting
+  case disconnected
+  case authorizing(pinCode: Swift.String, gobe: HealbeSDK.GoBeStruct)
+  case authorized
+  case requestPin(gobe: HealbeSDK.GoBeStruct, wrongPin: Swift.Bool)
+  case needChangePin(gobe: HealbeSDK.GoBeStruct)
+  case errorState
+  case needCriticalUpdate
+  case firmwareChecking
+  case firmwareChecked
+  case initializing
+  case requestInitializing
+  case initialized
+  case requestSensorStart
+  case requestResetSensor
+  case userInfoValidating
+  case userInfoValidated
+  case userConfigValidating
+  case userConfigValidated
+  case apiChecking
+  case apiChecked
+  case ready
+  case notRegisteredOnServer
+}
+extension HealbeSDK.GoBeState : Swift.Equatable {
+  public static func == (lhs: HealbeSDK.GoBeState, rhs: HealbeSDK.GoBeState) -> Swift.Bool
+}
+public enum SkinContactStatus : Swift.Equatable {
+  case takenOff
+  case fitsFine
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: HealbeSDK.SkinContactStatus, b: HealbeSDK.SkinContactStatus) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum UpdateFirmState : Swift.Equatable {
+  case downloading
+  case uploading
+  case flashing
+  case reconnect
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: HealbeSDK.UpdateFirmState, b: HealbeSDK.UpdateFirmState) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@available(iOS 13, *)
+public enum BluetoothPermission {
+  case notDetermined
+  case allow
+  case disallow
+  public static func == (a: HealbeSDK.BluetoothPermission, b: HealbeSDK.BluetoothPermission) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol HealbeSDKRoot : AnyObject {
+  var synchronizationProgress: HealbeSDK.Synchronization? { get }
+  var synchronizationProgressObserver: ((HealbeSDK.Synchronization) -> Swift.Void)? { get set }
+  var bluetoothIsOn: Swift.Bool { get }
+  var bluetoothIsOnObserver: ((Swift.Bool) -> Swift.Void)? { get set }
+  var logLevel: HealbeSDK.LogLevel { get set }
+  var validationModule: HealbeSDK.ValidationModule { get }
+  var sdkStatus: HealbeSDK.SDKStatus { get }
+  var sdkStatusObserver: ((HealbeSDK.SDKStatus) -> Swift.Void)? { get set }
+  var importantErrorObserver: ((HealbeSDK.HealbeError) -> Swift.Void)? { get set }
+  @available(iOS 13, *)
+  var bluetoothPermission: HealbeSDK.BluetoothPermission { get }
+  @available(iOS 13, *)
+  var bluetoothPermissionObserver: ((HealbeSDK.BluetoothPermission) -> Swift.Void)? { get set }
+  @available(iOS 13, *)
+  func awakeBluetooth()
+  var demoModeIsActive: Swift.Bool { get }
+  func setDemoMode(isActive: Swift.Bool, completion: @escaping (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void)
+  func login(userName: Swift.String, password: Swift.String, callBack: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func signUp(userName: Swift.String, password: Swift.String, allowMarketingCommunication: Swift.Bool, callBack: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func signOut(completion: @escaping (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void)
+  func hasEmailConfirmed() -> Swift.Bool
+  func resendEmailConfirmation(completion: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func resetPassword(login: Swift.String, callBack: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func getUser() throws -> HealbeSDK.UserModel
+  func updateUser(personalData: HealbeSDK.UserPersonalData, preferences: HealbeSDK.UserPreferences, callBack: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func initiateAccountDeletion(completion: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func deleteAvatar(callBack: @escaping (Swift.Result<Swift.Bool, HealbeSDK.HealbeError>) -> Swift.Void)
+  func setAvatar(_ data: Foundation.Data, callBack: @escaping (Swift.Result<Swift.String, HealbeSDK.HealbeError>) -> Swift.Void)
+  func getBorderValues() -> HealbeSDK.UserBorderValues
+  var dataProvider: HealbeSDK.SDKDataProvider { get }
+  var sendFileManager: HealbeSDK.SendFileManager { get }
+  var weightLogicDataProvider: HealbeSDK.WeightLogicDataProvider { get }
+  var tokenDataProvider: HealbeSDK.TokenDataProvider { get }
+  var sdkNetworkManager: HealbeSDK.PublicSDKNetworkManager { get }
+  var notificationDataProvider: HealbeSDK.NotificationDataProvider { get }
+  var pushShortSummaryLogs: Swift.Bool { get set }
+  var defaultSensorID: Swift.String { get }
+  func pushLogsToServer(appLogs: Foundation.URL?, callback: ((Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)?)
+  func getLastGobeServiceInformation() throws -> HealbeSDK.GobeServiceInformation?
+  func setUserWeight(_ weight: Swift.Float) throws
+}
+public protocol GoBeConnectInterface : AnyObject {
+  var defaultPin: Swift.String { get }
+  var lastGobe: HealbeSDK.GoBeStruct? { get }
+  var gobeState: HealbeSDK.GoBeState { get }
+  var gobeStateObserver: ((HealbeSDK.GoBeState) -> Swift.Void)? { get set }
+  func scan(callBack: @escaping ([HealbeSDK.GoBeStruct], Swift.Bool, HealbeSDK.HealbeError?) -> ())
+  func stopScan() -> (Swift.Bool, HealbeSDK.HealbeError?)
+  func connect(gobe: HealbeSDK.GoBeStruct, pincode: Swift.String?)
+  func disconnect()
+  func setAutoConnectGoBe(value: Swift.Bool)
+  func changePincode(newPincode: Swift.String, callBack: @escaping HealbeSDK.SDKCallBack)
+  func resetPincode(_ pukCode: Swift.String, callBack: @escaping (Swift.Result<Swift.Bool, HealbeSDK.HealbeError>) -> Swift.Void)
+  func changeGoBeName(name: Swift.String, completion: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func requestPUKCode(callBack: @escaping (Swift.Result<Swift.Bool, HealbeSDK.HealbeError>) -> Swift.Void)
+  func resetGoBe(callBack: @escaping HealbeSDK.SDKCallBack)
+  var backgroundConnectionLogic: HealbeSDK.BackgroundConnectionLogic { get }
+}
+public protocol GoBeFunction : AnyObject {
+  var mayUseBlockDownloading: Swift.Bool { get }
+  var mayUseSystemEventExt2: Swift.Bool { get }
+  var goBeNotificationsIsEnabled: Swift.Bool { get }
+  var skinContactStatus: HealbeSDK.SkinContactStatus? { get }
+  var skinContactStatusObserver: ((HealbeSDK.SkinContactStatus?) -> ())? { get set }
+  var batteryLevel: HealbeSDK.BatteryLevel? { get }
+  var batteryLevelObserver: ((HealbeSDK.BatteryLevel?) -> ())? { get set }
+  func startSynchronization()
+  var measureBloodPressureAvailability: HealbeSDK.Availability { get }
+  func measureBloodPressure(callBack: @escaping (HealbeSDK.ProgressResult<HealbeSDK.PressureInfo, HealbeSDK.HealbeError>) -> Swift.Void)
+  func cancelBloodPressureMeasurement()
+  var newBloodPressureMeasuredObserver: (() -> Swift.Void)? { get set }
+  func currentHeartRate() -> Swift.Int?
+  var heartRateObserver: (HealbeSDK.ScalarCallBack)? { get set }
+  var stressLevel: HealbeSDK.StressData.Value? { get }
+  var stressLevelObserver: ((HealbeSDK.StressData.Value?) -> Swift.Void)? { get set }
+  var hydrationLevel: HealbeSDK.HydrationData.Value? { get }
+  var hydrationLevelObserver: ((HealbeSDK.HydrationData.Value?) -> Swift.Void)? { get set }
+  var lastKnownDataDate: Foundation.Date? { get }
+  var lastKnownDataDateObserver: ((Foundation.Date?) -> Swift.Void)? { get set }
+  func changeScreenOrientation(callBack: @escaping (Swift.Result<Swift.Bool, HealbeSDK.HealbeError>) -> Swift.Void)
+  var isFirmwareUpdateAvailable: Swift.Bool { get }
+  var isFirmwareAvailableObserver: ((Swift.Bool) -> Swift.Void)? { get set }
+  func checkFirmwareAvailable()
+  func updateFirmware(progressCallBack: @escaping HealbeSDK.UpdateFirmCallBack, finishCallBack: @escaping HealbeSDK.SDKCallBack)
+  func stopUpdateFirmware()
+  func setBlockDownloading(isEnabled: Swift.Bool)
+  func setGoBeNotification(isEnabled: Swift.Bool)
+  func setSystemEventExt2(isEnabled: Swift.Bool)
+}
+public protocol SDKDataProvider : HealbeSDK.BetDataProvider, HealbeSDK.GoBeNotificationDataProvider, HealbeSDK.SleepDataProvider {
+  func gobeLastDropDate() -> Foundation.Date?
+  func gobeWornTime(startDate: Foundation.Date, endDate: Foundation.Date) -> Swift.Int
+  func bloodPressureMeasurements(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.PressureInfo]
+  func energyData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.EnergyData]
+  func energySummary(date: Foundation.Date) -> HealbeSDK.EnergySummary?
+  func energySummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.EnergySummary]
+  func mealData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.MealData]
+  func activitySummary(date: Foundation.Date) -> HealbeSDK.ActivitySummary?
+  func activitySummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.ActivitySummary]
+  func activityData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.ActivityData]
+  func hydrationData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.HydrationData]
+  func hydrationSummary(date: Foundation.Date) -> HealbeSDK.HydrationSummary?
+  func hydrationSummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.HydrationSummary]
+  func pulseData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.PulseData]
+  func pulseSummary(date: Foundation.Date) -> HealbeSDK.PulseSummary?
+  func pulseSummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.PulseSummary]
+  func stressData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.StressData]
+  func stressSummary(date: Foundation.Date) -> HealbeSDK.StressSummary?
+  func stressSummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.StressSummary]
+}
+public protocol AlarmsProvider : AnyObject {
+  func getAlarms() -> [HealbeSDK.Alarm]
+  func editAlarm(alarm: HealbeSDK.Alarm, callback: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func deleteAlarm(alarm: HealbeSDK.Alarm, callback: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  func addAlarm(alarm: HealbeSDK.Alarm, callback: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+  var alarmMaxCount: Swift.UInt { get }
+}
+public protocol UserBorderValues {
+  var height: HealbeSDK.BorderValues { get }
+  var weight: HealbeSDK.BorderValues { get }
+  var age: HealbeSDK.BorderValues { get }
+  var stepLength: HealbeSDK.BorderValues { get }
+  var sleepDuration: HealbeSDK.BorderValues { get }
+  var glassVolume: HealbeSDK.BorderValues { get }
+}
+public let healbeSharedInstance: HealbeSDK.AlarmsProvider & HealbeSDK.GoBeConnectInterface & HealbeSDK.GoBeFunction & HealbeSDK.HealbeSDKRoot
+@_hasMissingDesignatedInitializers public class ModuleConstants {
+  public static let emailConfirmationModuleId: Swift.Int
+  public static let notificationModuleId: Swift.Int
+  @objc deinit
+}
+public struct GoBeStruct {
+  public let name: Swift.String
+  public let identifier: Swift.String
+  public let isActive: Swift.Bool
+}
+public struct Weight {
+  public let weightId: Swift.Int?
+  public let date: Foundation.Date
+  public let lastUpdateDate: Foundation.Date?
+  public let weight: Foundation.Measurement<Foundation.UnitMass>
+  public let weightKG: Swift.Double
+  public let isDeleted: Swift.Bool
+  public var source: HealbeSDK.WeightSource {
+    get
+  }
+  public init(date: Foundation.Date, weightKG: Swift.Double, unit: Foundation.UnitMass, source: HealbeSDK.WeightSource)
+}
+extension HealbeSDK.Weight : Swift.Equatable {
+  public static func == (lhs: HealbeSDK.Weight, rhs: HealbeSDK.Weight) -> Swift.Bool
+}
+public enum NotificationDataProviderError : Swift.Error {
+  case cantFindNotification
+  public static func == (a: HealbeSDK.NotificationDataProviderError, b: HealbeSDK.NotificationDataProviderError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol NotificationDataProviderObserver : AnyObject {
+  func notificationDataDidChanged()
+}
+public protocol NotificationDataProvider {
+  func getNotification(timestamp: Swift.Int, recordId: Swift.Int) -> HealbeSDK.NotificationData?
+  func getNotificationsHistory(eventTypes: Swift.Set<Swift.Int>) -> [HealbeSDK.NotificationData]
+  func addNotification(model: HealbeSDK.NotificationData)
+  func setHasRead(timestamp: Swift.Int, recordId: Swift.Int) throws
+  func getNotReadNotificationCount(eventType: Swift.Int) -> Swift.Int
+  func addObserver(subscriber: HealbeSDK.NotificationDataProviderObserver)
+  func removeObserver(subscriber: HealbeSDK.NotificationDataProviderObserver)
+}
+public enum BackgroundConnectSyncState : Swift.Equatable {
+  case notStarted
+  case onlyScan
+  case connecting
+  case connected
+  case disconnecting
+  case disconnected
+  case syncData
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: HealbeSDK.BackgroundConnectSyncState, b: HealbeSDK.BackgroundConnectSyncState) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol BackgroundConnectionSyncObserver : AnyObject {
+  func stateDidChanged(value: HealbeSDK.BackgroundConnectSyncState)
+}
+public struct SleepSummary {
+  public let date: Foundation.Date
+  public let totalSleepTime: Swift.UInt
+  public let totalAwakeTime: Swift.UInt
+  public let totalTimeInBed: Swift.UInt
+  public let sleepEfficiency: Swift.Int
+  public let sleepQuality: Swift.UInt
+  public let recommendation: HealbeSDK.SleepRecommendation
+}
+public struct HydrationSummary {
+  public let date: Foundation.Date
+  public let normalMinutes: Swift.Double
+  public let lowMinutes: Swift.Double
+  public let totalWaterLoss: Swift.Double?
+  public let data: [HealbeSDK.HydrationData]
+}
+public protocol WeightLogicSynchronizationObserver : AnyObject {
+  func synchronizationDidChanged(isActive: Swift.Bool)
+  func synchronizationDidEnded(with errors: [HealbeSDK.HealbeError])
+}
+public protocol WeightLogicSynchronization : AnyObject {
+  var synchronizationIsActive: Swift.Bool { get }
+  func startSynchronization(completion: @escaping ([HealbeSDK.HealbeError]) -> Swift.Void)
+  func cancelSynchronization()
+  func addObserver(subscriber: HealbeSDK.WeightLogicSynchronizationObserver)
+  func removeObserver(subscriber: HealbeSDK.WeightLogicSynchronizationObserver)
+}
+public struct AlarmSettings : Swift.Equatable {
+  public static func == (a: HealbeSDK.AlarmSettings, b: HealbeSDK.AlarmSettings) -> Swift.Bool
+}
+extension HealbeSDK.AlarmSettings : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct ActivitySummaryData {
+  public let minutes: Swift.UInt
+  public let kcal: Swift.UInt
+}
+public protocol BetDataProviderObserver : AnyObject {
+  func actualBetDataDidChanged()
+}
+public protocol BetDataProvider {
+  func getBetData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.BetData]
+  func getBetSummary(date: Foundation.Date) -> HealbeSDK.BetSummary?
+  func getBetSummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.BetSummary]
+  func getActualBetData() -> HealbeSDK.BetData?
+  func addObserver(subscriber: HealbeSDK.BetDataProviderObserver)
+  func removeObserver(subscriber: HealbeSDK.BetDataProviderObserver)
+}
+public enum WeightGoalValidatorError : Swift.Error {
+  case notInPermitedRange(Swift.String, HealbeSDK.BorderValues)
+  case impossibleGoal
+  case notFoundEntity
+  case goalNotActive
+  case startWeightMoreGoalWeight
+  case startDateMoreGoalDate
+  case changeStatusLowerStartDate
+  case activeGoalLater
+}
+extension HealbeSDK.WeightGoalValidatorError : Foundation.LocalizedError {
+}
+public enum WeightSource : Swift.Int {
+  case healbe
+  case googleFit
+  case appleHealth
+  case API
+  case withingsNokia
+  case validic
+  case unknown
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.WeightSource : Swift.CaseIterable {
+  public typealias AllCases = [HealbeSDK.WeightSource]
+  public static var allCases: [HealbeSDK.WeightSource] {
+    get
+  }
+}
+extension HealbeSDK.WeightSource : Swift.Equatable {
+}
+extension HealbeSDK.WeightSource : Swift.Encodable {
+}
+extension HealbeSDK.WeightSource : Swift.Decodable {
+}
+public struct EnergySummary {
+  public let date: Foundation.Date
+  public let energyIntake: Swift.Double
+  public let energyBurned: Swift.Double
+  public let energyBalance: Swift.Double
+  public let carbohydratesIntake: Swift.Double
+  public let fatIntake: Swift.Double
+  public let proteinIntake: Swift.Double
+  public let data: [HealbeSDK.EnergyData]
+  public let meals: [HealbeSDK.MealData]
+}
+public struct HandledGoBeNotificationData {
+  public let notificationId: Swift.Int
+  public let handleTimestamp: Swift.Int
+  public let isSuccesful: Swift.Bool
+  public init(notificationId: Swift.Int, handleTimestamp: Swift.Int, isSuccesful: Swift.Bool)
+}
+@_hasMissingDesignatedInitializers public class ValidationModule {
+  public func validate(newPincode: Swift.String) -> HealbeSDK.ValidationResult
+  public func validate(string: Swift.String) -> HealbeSDK.ValidationResult
+  public func validate(email: Swift.String) -> HealbeSDK.ValidationResult
+  public func validate(password: Swift.String) -> HealbeSDK.ValidationResult
+  public func validate(name: Swift.String) -> HealbeSDK.ValidationResult
+  public func validate(bithday: Foundation.Date) -> HealbeSDK.ValidationResult
+  public func validate(height: Swift.Float) -> HealbeSDK.ValidationResult
+  public func validate(weight: Swift.Float) -> HealbeSDK.ValidationResult
+  public func validate(comfortSleepDuration: Swift.UInt16) -> HealbeSDK.ValidationResult
+  public func validate(glassVolume: Foundation.Measurement<Foundation.UnitVolume>) -> HealbeSDK.ValidationResult
+  public func validate(stringLength: Swift.String) -> HealbeSDK.ValidationResult
+  @objc deinit
+}
+extension HealbeSDK.ValidationModule : HealbeSDK.UserBorderValues {
+  public var height: HealbeSDK.BorderValues {
+    get
+  }
+  public var weight: HealbeSDK.BorderValues {
+    get
+  }
+  public var age: HealbeSDK.BorderValues {
+    get
+  }
+  public var stepLength: HealbeSDK.BorderValues {
+    get
+  }
+  public var sleepDuration: HealbeSDK.BorderValues {
+    get
+  }
+  public var glassVolume: HealbeSDK.BorderValues {
+    get
+  }
+}
+public struct SleepEventData {
+  public enum DataType : Swift.Equatable {
+    case sleepStart
+    case sleepEnd
+    case remStart
+    case remEnd
+    case alarm
+    case gobePowerOff
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: HealbeSDK.SleepEventData.DataType, b: HealbeSDK.SleepEventData.DataType) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let date: Foundation.Date
+  public let type: HealbeSDK.SleepEventData.DataType
+}
+public struct AlarmEvent {
+  public let date: Foundation.Date
+}
+public struct ActivityData {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let steps: Swift.UInt16
+}
+public enum LogLevel : Swift.Int {
+  case verbose
+  case debug
+  case info
+  case warning
+  case error
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct ErrorForExternalMetric : Foundation.LocalizedError {
+}
+public struct EnergyData {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let hfLevel: Swift.Double
+  public let intake: Swift.Double
+  public let burned: Swift.Double
+}
+public enum WeightGoalPlan : Swift.Int {
+  case lazy
+  case comfortable
+  case fast
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.WeightGoalPlan : Swift.CaseIterable {
+  public typealias AllCases = [HealbeSDK.WeightGoalPlan]
+  public static var allCases: [HealbeSDK.WeightGoalPlan] {
+    get
+  }
+}
+extension HealbeSDK.WeightGoalPlan : Swift.Equatable {
+}
+extension HealbeSDK.WeightGoalPlan : Swift.Encodable {
+}
+extension HealbeSDK.WeightGoalPlan : Swift.Decodable {
+}
+public protocol WeightDataProviderObserver : AnyObject {
+  func actualWeightDidChanged(_ weight: HealbeSDK.Weight?)
+  func weightsDidChanged()
+}
+extension HealbeSDK.WeightDataProviderObserver {
+  public func actualWeightDidChanged(_ weight: HealbeSDK.Weight?)
+  public func weightsDidChanged()
+}
+public protocol WeightDataProvider : AnyObject {
+  func getLastWeight() -> HealbeSDK.Weight?
+  func getLastWeight(startDate: Foundation.Date, endDate: Foundation.Date) -> HealbeSDK.Weight?
+  func getWeights(startDate: Foundation.Date, endDate: Foundation.Date, ascending: Swift.Bool) -> [HealbeSDK.Weight]
+  func getAllWeight(ascending: Swift.Bool) -> [HealbeSDK.Weight]
+  func getWeight(startDate: Foundation.Date, endDate: Foundation.Date, exceptSource: HealbeSDK.WeightSource, ascending: Swift.Bool) -> [HealbeSDK.Weight]
+  func getLastWeight(source: HealbeSDK.WeightSource) -> HealbeSDK.Weight?
+  func getWeight(updatedAfter lastUpdate: Foundation.Date, exceptSource: HealbeSDK.WeightSource, ascending: Swift.Bool) -> [HealbeSDK.Weight]
+  func getWeight(deletedAfter deleteDate: Foundation.Date, ascending: Swift.Bool) -> [HealbeSDK.Weight]
+  func saveWeight(_ weight: HealbeSDK.Weight, numbersAfterSeparator: Swift.Int?) throws
+  func saveWeight(_ weight: HealbeSDK.Weight) throws
+  func saveWeights(_ weights: [HealbeSDK.Weight], numbersAfterSeparator: Swift.Int?) throws
+  func saveWeights(_ weights: [HealbeSDK.Weight]) throws
+  func saveWeightsIgnoringDuplicates(_ weights: [HealbeSDK.Weight]) throws
+  func updateWeight(oldWeight: HealbeSDK.Weight, newWeight: HealbeSDK.Weight) throws
+  func updateWeight(oldWeight: HealbeSDK.Weight, newWeight: HealbeSDK.Weight, numbersAfterSeparator: Swift.Int?) throws
+  func deleteWeight(_ weight: HealbeSDK.Weight) throws
+  func deleteWeights(_ weights: [HealbeSDK.Weight]) throws
+  func deleteWeight(serverId: Swift.Int) throws
+  func addObserver(subscriber: HealbeSDK.WeightDataProviderObserver)
+  func removeObserver(subscriber: HealbeSDK.WeightDataProviderObserver)
+}
+public struct WeightGoal {
+  public let serverId: Swift.Int?
+  public let startDate: Foundation.Date
+  public let goalDate: Foundation.Date
+  public let startWeight: Swift.Double
+  public let goalWeight: Swift.Double
+  public let userComment: Swift.String?
+  public let lastUpdateDate: Foundation.Date?
+  public let changeStatusDate: Foundation.Date?
+  public let isDeleted: Swift.Bool
+  public var status: HealbeSDK.WeightGoalStatus {
+    get
+  }
+  public var plan: HealbeSDK.WeightGoalPlan {
+    get
+  }
+  public init(startDate: Foundation.Date, goalDate: Foundation.Date, startWeight: Swift.Double, goalWeight: Swift.Double, userComment: Swift.String? = nil, status: HealbeSDK.WeightGoalStatus, plan: HealbeSDK.WeightGoalPlan, changeStatusDate: Foundation.Date? = nil)
+  public func isActive() -> Swift.Bool
+}
+extension HealbeSDK.WeightGoal : Swift.Equatable {
+  public static func == (lhs: HealbeSDK.WeightGoal, rhs: HealbeSDK.WeightGoal) -> Swift.Bool
+}
+extension Foundation.UnitMass {
+  public static var jin: Foundation.UnitMass {
+    get
+  }
+}
+public struct PulseSummary {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let minimumHeartRate: (heartRate: Swift.Int, date: Foundation.Date)?
+  public let maximumHeartRate: (heartRate: Swift.Int, date: Foundation.Date)?
+  public let averageSleepHeartRate: Swift.Int?
+  public let averageAwakeHeartRate: Swift.Int?
+  public let data: [HealbeSDK.PulseData]
+}
+public struct PressureInfo : Swift.Equatable {
+  public let systolic: Swift.UInt16
+  public let diastolic: Swift.UInt16
+  public let heartRate: Swift.UInt16
+  public let timestamp: Swift.Int64
+  public let timezoneOffset: Swift.Int64
+  public var date: Foundation.Date {
+    get
+  }
+  public static func == (a: HealbeSDK.PressureInfo, b: HealbeSDK.PressureInfo) -> Swift.Bool
+}
+public enum WeightGoalStatus : Swift.Int {
+  case inProgress
+  case reached
+  case canceled
+  case failed
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.WeightGoalStatus : Swift.Equatable {
+}
+extension HealbeSDK.WeightGoalStatus : Swift.CaseIterable {
+  public typealias AllCases = [HealbeSDK.WeightGoalStatus]
+  public static var allCases: [HealbeSDK.WeightGoalStatus] {
+    get
+  }
+}
+extension HealbeSDK.WeightGoalStatus : Swift.Encodable {
+}
+extension HealbeSDK.WeightGoalStatus : Swift.Decodable {
+}
+public struct NotificationData {
+  public let recordId: Swift.Int
+  public let timestamp: Swift.Int
+  public let utcOffset: Swift.Int
+  public let eventData: Foundation.Data
+  public let eventType: Swift.UInt32
+  public let hasRead: Swift.Bool
+  public init(recordId: Swift.Int, timestamp: Swift.Int, utcOffset: Swift.Int, eventData: Foundation.Data, eventType: Swift.UInt32, hasRead: Swift.Bool)
+}
+public typealias AlarmDays = Swift.Set<HealbeSDK.AlarmDay>
+public enum AlarmDay : Swift.UInt32 {
+  case monday, tuesday, wednesday, thursday, friday, saturday, sunday, repeatEveryWeek
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public init?(rawValue: Swift.UInt32)
+  public typealias AllCases = [HealbeSDK.AlarmDay]
+  public typealias RawValue = Swift.UInt32
+  public static var allCases: [HealbeSDK.AlarmDay] {
+    get
+  }
+}
+public enum AlarmType {
+  case time
+  case remPhase(duration: Swift.UInt32)
+  case quality(value: Swift.UInt8)
+}
+public enum AlarmEnable {
+  case on
+  case off
+  public static func == (a: HealbeSDK.AlarmEnable, b: HealbeSDK.AlarmEnable) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct Alarm : Swift.Equatable {
+  public init(id: Swift.UInt8, type: HealbeSDK.AlarmType, days: HealbeSDK.AlarmDays, enabled: HealbeSDK.AlarmEnable, hour: Swift.UInt16, minutes: Swift.UInt16)
+  public let id: Swift.UInt8
+  public let type: HealbeSDK.AlarmType
+  public let days: HealbeSDK.AlarmDays
+  public let enabled: HealbeSDK.AlarmEnable
+  public let hour: Swift.UInt16
+  public let minutes: Swift.UInt16
+  public static func == (lhs: HealbeSDK.Alarm, rhs: HealbeSDK.Alarm) -> Swift.Bool
+}
+public protocol SleepDataProvider {
+  func sleepRecommendation() -> HealbeSDK.SleepRecommendation?
+  func sleepIntervalData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.SleepIntervalData]
+  func anxietyData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.AnxietyData]
+  func sleepSummary(date: Foundation.Date) -> HealbeSDK.SleepSummary?
+  func sleepSummary(startDate: Foundation.Date, endDate: Foundation.Date) -> [Foundation.DateInterval : HealbeSDK.SleepSummary]
+  func alarmEvents(startDate: Foundation.Date, endDate: Foundation.Date) throws -> [HealbeSDK.AlarmEvent]
+  func sleepEventsData(startDate: Foundation.Date, endDate: Foundation.Date) -> [HealbeSDK.SleepEventData]
+}
+public typealias WeightLogicDataProvider = HealbeSDK.WeightDataProvider & HealbeSDK.WeightGoalDataProvider & HealbeSDK.WeightLogicSynchronization
+public enum BetGSRLevel : Swift.Hashable {
+  case calm
+  case active
+  case tension
+  case overload
+  case calculating
+  public init(gsrLevel: Swift.UInt)
+  public static func == (a: HealbeSDK.BetGSRLevel, b: HealbeSDK.BetGSRLevel) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol GoBeNotificationDataProtocol {
+  var id: Swift.Int { get }
+  var timestamp: Swift.Int { get }
+  var timezone: Swift.Int { get }
+  var type: HealbeSDK.GoBeNotificationDataType { get }
+  var hasRead: Swift.Bool { get }
+}
+public enum FirmwareType : Swift.Int, Swift.Codable {
+  case functional
+  case display
+  case bluetooth
+  case base
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum GoBeNotificationDataType : Swift.Equatable {
+  public enum UrgencyType : Swift.Equatable {
+    case urgent
+    case nonUrgent
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: HealbeSDK.GoBeNotificationDataType.UrgencyType, b: HealbeSDK.GoBeNotificationDataType.UrgencyType) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  case unknown
+  case lowHydro
+  case timeToMove
+  case syncWithApp
+  case batteryCharged
+  case batteryLow
+  case batteryCritical
+  case batteryNotCharging
+  case niceMove
+  case unnowned(Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+  public func urgencyType() -> HealbeSDK.GoBeNotificationDataType.UrgencyType
+  public static func == (a: HealbeSDK.GoBeNotificationDataType, b: HealbeSDK.GoBeNotificationDataType) -> Swift.Bool
+}
+public enum GoBeNotificationDataProviderError : Swift.Error {
+  case unknownIds([Swift.Int])
+  case notificationsIsDisabled
+}
+public protocol GoBeNotificationDataProviderObserver : AnyObject {
+  func urgentNotReadNotificationsDidAdded()
+  func nonUrgentNotReadNotificationDidAdded()
+}
+public protocol GoBeNotificationDataProvider : AnyObject {
+  func getGoBeNotificationData(fromDate: Foundation.Date) -> [HealbeSDK.BaseGoBeNotificationData]
+  func notificationSetHasReadFlag(info: [HealbeSDK.HandledGoBeNotificationData]) throws
+  func deleteUrgentNotification(objects: [HealbeSDK.UrgentGoBeNotificationData])
+  func getNotReadUrgentNotifications() -> [HealbeSDK.UrgentGoBeNotificationData]
+  func getNotReadNonUrgentNotifications() -> [HealbeSDK.BaseGoBeNotificationData]
+  func addObserver(subscriber: HealbeSDK.GoBeNotificationDataProviderObserver)
+  func removeObserver(subscriber: HealbeSDK.GoBeNotificationDataProviderObserver)
+}
+public struct BetData : Swift.Equatable {
+  public enum Trend : Swift.Equatable {
+    case goesDown
+    case gouesUp
+    case stable
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: HealbeSDK.BetData.Trend, b: HealbeSDK.BetData.Trend) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let startDate: Foundation.Date
+  public let endDate: Foundation.Date
+  public let calculating: Swift.Bool
+  public let gsrActivity: Swift.UInt
+  public let trend: HealbeSDK.BetData.Trend
+  public static func == (lhs: HealbeSDK.BetData, rhs: HealbeSDK.BetData) -> Swift.Bool
+  public func getLevel() -> HealbeSDK.BetGSRLevel
+}
+public enum ProgressResult<Success, Failure> where Failure : Swift.Error {
+  case success(Success)
+  case failure(Failure)
+  case progress(Swift.Int)
+}
+precedencegroup OperationChaining {
+  associativity: left
+}
+infix operator ==> : OperationChaining
+public protocol TokenDataProvider : AnyObject {
+  func addToken(_ token: HealbeSDK.Token) throws
+  func getTokens(by type: Swift.String) throws -> [HealbeSDK.Token]
+  func getAllTokens() throws -> [HealbeSDK.Token]
+  @discardableResult
+  func removeTokens(by type: Swift.String) throws -> Swift.Bool
+  @discardableResult
+  func removeToken(_ token: HealbeSDK.Token) throws -> Swift.Bool
+  func removeAllTokens() throws
+}
+public enum WeightValidatorError : Swift.Error {
+  case notInPermitedRange(HealbeSDK.BorderValues)
+  case duplicate
+  case notFoundEntity
+}
+extension HealbeSDK.WeightValidatorError : Foundation.LocalizedError {
+}
+public struct HealbeError : Swift.Error {
+  public enum ErrorType : Swift.Int {
+    case validation
+    case network
+    case gobe
+    case bluetooth
+    case userPrivateStorage
+    case storage
+    case user
+    case updateFirm
+    case state
+    case alarm
+    case fileStorage
+    case undefined
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public let type: HealbeSDK.HealbeError.ErrorType
+  public let error: Swift.Error
+}
+extension HealbeSDK.HealbeError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension HealbeSDK.HealbeError : Foundation.CustomNSError {
+  public static var errorDomain: Swift.String {
+    get
+  }
+  public var errorCode: Swift.Int {
+    get
+  }
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+public enum UserPrivateStorageError : Swift.Error {
+  case keyWasLost
+  case noData
+  case encodeError
+  case decodeError
+  case saveError
+  case readError
+  case deleteError
+  case undefined
+  public static func == (a: HealbeSDK.UserPrivateStorageError, b: HealbeSDK.UserPrivateStorageError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.UserPrivateStorageError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum NetError : Swift.Error {
+  case notConnected
+  case cantCreateRequest
+  case timeout
+  case parametersAreMissing
+  case parametersAreWrong
+  case serverInternalError
+  case serverError
+  case cantParseResponse
+  case notGeneralFormat([Swift.Int])
+  case unknown
+  case uploadFailed
+  case deleteFailed
+  case accessIdError
+  case getAccessIdError
+  case loginOrPasswordWrong
+  case tooMuchWrongTries
+  case userExists
+  case userDataEmpty
+  case userNotExist
+  case userGroupEmpty
+  case healbeNotFound
+  case healbeRequiredRegistration
+  case healbeAlreadyRegistered
+  case healbeBlocked
+  case alreadyExist
+  case notFound
+  case wrongChecksum
+  case wrongAppMode
+}
+extension HealbeSDK.NetError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension HealbeSDK.NetError : Swift.Equatable {
+  public static func == (a: HealbeSDK.NetError, b: HealbeSDK.NetError) -> Swift.Bool
+}
+public enum GobeError : Swift.Error {
+  case needPin
+  case wrongPin
+  case needCriticalUpdate
+  case notConnected
+  case notReady
+  case notFitFine
+  case cancelled
+  case alreadyStarted
+  public static func == (a: HealbeSDK.GobeError, b: HealbeSDK.GobeError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.GobeError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum BluetoothError : Swift.Error {
+  case disabledOnDevice
+  case wbWrongSensorState
+  case lostConnection
+  case cancelled
+  case commandError(HealbeSDK.StatusCode)
+  case disconnectFail
+  case timeOut
+  case needReset
+  case invalidCommandParams
+  case mismatchType(HealbeSDK.Receivable)
+  case writeFailed
+  case readFailed
+  case notImplemented
+  case failConnection(Swift.String)
+  case bluetoothTurnedOff
+  case wrongOperationOrder
+  case wrongPuk
+  case wrongPukLength
+  case numberRepetitionsEnded
+  case wrongSessionState
+  case wrongAppMode
+  case cantRetrievePeripherals
+  case unnowned
+}
+extension HealbeSDK.BluetoothError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum ValidationError : Swift.Error {
+  case shouldBeNotDefault
+  case notInPermitedRange(HealbeSDK.BorderValues)
+  case tooShortValue(Swift.Int)
+  case restrictedSymbol(Swift.String)
+  case tooYoung(Swift.String)
+  case tooOld(Swift.String)
+  case valuesIsTooDifferent(Swift.String)
+  case userNotFilled(Swift.String)
+  case isNotEmail
+  case emptyInput
+  case undefined
+  case valueIsExpired(Swift.String)
+  case moreMaxAllowed(Swift.UInt)
+  case duplicate
+}
+extension HealbeSDK.ValidationError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum StorageError : Swift.Error {
+  case notApplicable
+  case notFound
+  case stackInit(Swift.Error)
+  case fetch(Swift.Error)
+  case delete(Swift.Error)
+  case save(Swift.Error)
+  case typeMismatch(expected: Swift.String, got: Swift.String)
+  case noContext
+  case storageWasDestroyed
+  case timeout
+}
+extension HealbeSDK.StorageError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum TaskError : Swift.Error {
+  case linkWasDiscarded
+  public var localizedDescription: Swift.String {
+    get
+  }
+  public static func == (a: HealbeSDK.TaskError, b: HealbeSDK.TaskError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum StateError : Swift.Error {
+  case notAppliedForCurrentState
+  case notAppliedForCurrentCountry
+  case wrongOperationOrder
+  case notImplemented
+  case undifinedSDKStatus
+  public static func == (a: HealbeSDK.StateError, b: HealbeSDK.StateError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.StateError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum FileStorageError : Swift.Error {
+  case saveError
+  case readError
+  case tooBigOffset
+  public static func == (a: HealbeSDK.FileStorageError, b: HealbeSDK.FileStorageError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.FileStorageError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum FirmwareUpdateError : Swift.Error {
+  case canceled
+  case `internal`
+  case nothingToUpdate
+  case lowBatteryLevel
+  case cannotFlash
+  case firmwareNotSet
+  public static func == (a: HealbeSDK.FirmwareUpdateError, b: HealbeSDK.FirmwareUpdateError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.FirmwareUpdateError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum AlarmError : Swift.Error {
+  case alarmsMaxReached
+  case alarmsListIsEmpty
+  case alarmDuplicate
+  case alarmDuplicatedDisabled
+  case alarmNotFound
+  case invalidAlarmId
+  case invalidAlarmParametres
+  case unknown
+  public static func == (a: HealbeSDK.AlarmError, b: HealbeSDK.AlarmError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.AlarmError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public enum SyncWeightLogicError : Swift.Error {
+  case syncBeCanceled
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension HealbeSDK.SyncWeightLogicError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension HealbeSDK.SyncWeightLogicError : Swift.CaseIterable, Swift.Equatable {
+  public static func == (a: HealbeSDK.SyncWeightLogicError, b: HealbeSDK.SyncWeightLogicError) -> Swift.Bool
+  public typealias AllCases = [HealbeSDK.SyncWeightLogicError]
+  public static var allCases: [HealbeSDK.SyncWeightLogicError] {
+    get
+  }
+}
+public enum BackgroundConnetionError : Swift.Error {
+  case cantStartScan
+  public static func == (a: HealbeSDK.BackgroundConnetionError, b: HealbeSDK.BackgroundConnetionError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol BackgroundConnectionLogic : AnyObject {
+  func scanIsEnabled() -> Swift.Bool
+  func startScan() throws
+  func stop(completion: @escaping () -> Swift.Void)
+}
+public enum BatteryLevel {
+  case charging(Swift.Int?)
+  case level(Swift.Int)
+}
+extension HealbeSDK.BatteryLevel : Swift.Equatable {
+  public static func == (a: HealbeSDK.BatteryLevel, b: HealbeSDK.BatteryLevel) -> Swift.Bool
+}
+public enum GobeModel {
+  case Gobe10
+  case Gobe11
+  case Gobe2
+  case Gobe3
+  case unknownModel
+  public static func == (a: HealbeSDK.GobeModel, b: HealbeSDK.GobeModel) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct GobeServiceInformation {
+  public let name: Swift.String
+  public let apiVersion: Swift.UInt32
+  public let apiFlags: Swift.UInt32
+  public let functionalFirmware: Swift.String
+  public let firmwareFlags: Swift.UInt32
+  public let sensorId: Swift.String
+  public let baseFirmwareVersion: Swift.String
+  public let displayFirmwareVersion: Swift.String
+  public let chipId: Swift.String
+  public let bluetoothMac: Swift.String
+  public let bleFirmwareVersion: Swift.String
+  public var model: HealbeSDK.GobeModel {
+    get
+  }
+}
+public struct HydrationData {
+  public enum HydrationType {
+    case normal
+    case low
+    public static func == (a: HealbeSDK.HydrationData.HydrationType, b: HealbeSDK.HydrationData.HydrationType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum Value : Swift.Equatable {
+    case calculating
+    case value(Swift.Int, HealbeSDK.HydrationData.HydrationType)
+    public static func == (a: HealbeSDK.HydrationData.Value, b: HealbeSDK.HydrationData.Value) -> Swift.Bool
+  }
+  public let timestamp: Foundation.Date
+  public let duration: Foundation.TimeInterval
+  public let hydrationLevel: HealbeSDK.HydrationData.Value
+  public let metabolicWaterLoss: Swift.Double?
+  public let activityWaterLoss: Swift.Double?
+}
+public enum StressLevelDuration {
+  case noStress(Swift.Int)
+  case low(Swift.Int)
+  case moderate(Swift.Int)
+  case high(Swift.Int)
+  case extreme(Swift.Int)
+  public func getDuration() -> Swift.Int
+}
+public struct StressSummary {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let averageStressLevel: Swift.Int
+  public let data: [HealbeSDK.StressData]
+  public let levelDurations: [HealbeSDK.StressLevelDuration]
+  public let accumulatedStressMinutes: Foundation.TimeInterval
+  public func getAccumulatedStress(unit: Foundation.UnitDuration) -> Foundation.TimeInterval
+}
+public struct SleepIntervalData {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let type: HealbeSDK.SleepIntervalData.IntervalType
+  public let endType: HealbeSDK.SleepIntervalData.EndType
+  public enum IntervalType {
+    case sleep
+    case rem
+    case awake
+    public static func == (a: HealbeSDK.SleepIntervalData.IntervalType, b: HealbeSDK.SleepIntervalData.IntervalType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum EndType {
+    case normal
+    case sensorOff
+    case notEnded
+    public static func == (a: HealbeSDK.SleepIntervalData.EndType, b: HealbeSDK.SleepIntervalData.EndType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+public func fatalError(_ message: @autoclosure () -> Swift.String = "", file: Swift.StaticString = #file, line: Swift.UInt = #line) -> Swift.Never
+public func preconditionFailure(_ message: @autoclosure () -> Swift.String = String(), file: Swift.StaticString = #file, line: Swift.UInt = #line) -> Swift.Never
+public protocol WeightGoalDataProviderObserver : AnyObject {
+  func actualWeightGoalDidChanged(_ weightGoal: HealbeSDK.WeightGoal?)
+  func weightGoalsDidChanged()
+}
+extension HealbeSDK.WeightGoalDataProviderObserver {
+  public func actualWeightGoalDidChanged(_ weight: HealbeSDK.WeightGoal?)
+  public func weightGoalsDidChanged()
+}
+public protocol WeightGoalDataProvider {
+  func getGoals() -> [HealbeSDK.WeightGoal]
+  func getLastGoal() -> HealbeSDK.WeightGoal?
+  func saveWeightGoal(_ weightGoal: HealbeSDK.WeightGoal) throws
+  func updateWeightGoal(_ weightGoal: HealbeSDK.WeightGoal, status: HealbeSDK.WeightGoalStatus, changeStatusDate: Foundation.Date) throws
+  func addObserver(subscriber: HealbeSDK.WeightGoalDataProviderObserver)
+  func removeObserver(subscriber: HealbeSDK.WeightGoalDataProviderObserver)
+}
+public let defaultSensorId: Swift.String
+public var defaultSensorIdInt: Swift.UInt32 {
+  get
+}
+public let emailConfirmationEventType: Swift.Int
+public let agreeReceiveCommunicationEventType: Swift.Int
+public let desagreeReceiveCommunicationEventType: Swift.Int
+public let deleteProfileEventType: Swift.Int
+public let emailConfirmationModuleId: Swift.Int
+public enum SendFileManagerError : Swift.Error {
+  case prepareFilesError
+  case netError(archiveURL: Foundation.URL, error: Swift.Error)
+  case unknown
+}
+extension HealbeSDK.SendFileManagerError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+public protocol SendFileManager {
+  func add(fileStrategy: HealbeSDK.AdditionalLogFilesStrategyBase)
+  func add(fileStrategies: [HealbeSDK.AdditionalLogFilesStrategyBase])
+  func remove(fileStrategy: HealbeSDK.AdditionalLogFilesStrategyBase)
+  func remove(fileStrategies: [HealbeSDK.AdditionalLogFilesStrategyBase])
+  func removeAllLogFileStrategies()
+  func sendFilesToServer(typeId: Swift.Int, progress: @escaping (HealbeSDK.SendFilesProgressInfo) -> Swift.Void, completion: @escaping (Swift.Result<Swift.Void, HealbeSDK.HealbeError>) -> Swift.Void)
+}
+public struct SynchronizationItem {
+  public let startItem: Swift.Int
+  public let endItem: Swift.Int
+  public let lastIndex: Swift.Int
+  public let progress: Swift.Double
+  public let difference: Swift.Int
+}
+public struct Token {
+  public init(type: Swift.String, value: Swift.String)
+}
+extension HealbeSDK.Token : Swift.Equatable {
+  public static func == (a: HealbeSDK.Token, b: HealbeSDK.Token) -> Swift.Bool
+}
+public struct SendFilesProgressInfo {
+  public enum ProgressType {
+    case prepareFiles
+    case sendToServer
+    public static func == (a: HealbeSDK.SendFilesProgressInfo.ProgressType, b: HealbeSDK.SendFilesProgressInfo.ProgressType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let type: HealbeSDK.SendFilesProgressInfo.ProgressType
+  public let error: Swift.Error?
+}
+public enum StressValueType : Swift.Int {
+  case NoStress
+  case Low
+  case Moderate
+  case High
+  case Extreme
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct StressData {
+  public enum Value : Swift.Equatable {
+    case calculating
+    case value(Swift.Int, HealbeSDK.StressValueType)
+    public static func == (a: HealbeSDK.StressData.Value, b: HealbeSDK.StressData.Value) -> Swift.Bool
+  }
+  public let timestamp: Foundation.Date
+  public let duration: Foundation.TimeInterval
+  public let stressLevel: HealbeSDK.StressData.Value
+  public let emotionalTension: Swift.Bool
+  public let accumulatedStressMinutes: Foundation.TimeInterval
+  public func getAccumulatedStressDuration(unit: Foundation.UnitDuration) -> Foundation.TimeInterval
+}
+public typealias SDKCallBack = (_ success: Swift.Bool, _ error: HealbeSDK.HealbeError?) -> ()
+public typealias BorderValues = (max: Swift.Double, min: Swift.Double)
+public typealias UpdateFirmCallBack = (_ firmwareType: HealbeSDK.FirmwareType, _ progress: Swift.UInt, _ state: HealbeSDK.UpdateFirmState) -> ()
+public typealias ScalarCallBack = (_ Result: Swift.Int, _ error: HealbeSDK.HealbeError?) -> ()
+public typealias ValidationResult = (success: Swift.Bool, error: HealbeSDK.ValidationError?)
+public enum UrgentGoBeNotificationDataType : Swift.Equatable {
+  case lowHydro
+  case niceMove
+  public var rawValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: HealbeSDK.UrgentGoBeNotificationDataType, b: HealbeSDK.UrgentGoBeNotificationDataType) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct MealData {
+  public let start: Foundation.Date
+  public let end: Foundation.Date
+  public let energyIntake: Swift.Double
+  public let carbohydratesIntake: Swift.Double
+  public let fatIntake: Swift.Double
+  public let proteinIntake: Swift.Double
+  public let processing: Swift.Bool
+  public let deleted: Swift.Bool
+}
+public typealias SynchronizationProgress = [Swift.String : HealbeSDK.SynchronizationItem]
+public enum SynchronizationType {
+  case wristband
+  case netGet
+  case netSend
+  public static func == (a: HealbeSDK.SynchronizationType, b: HealbeSDK.SynchronizationType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct Synchronization {
+  public let isActive: Swift.Bool
+  public let totalSychronization: Swift.Double
+  public let detail: HealbeSDK.SynchronizationProgress
+  public let type: HealbeSDK.SynchronizationType
+}
+public struct UserPersonalData {
+  public enum Sex : Swift.UInt32 {
+    case male
+    case female
+    public init?(rawValue: Swift.UInt32)
+    public typealias RawValue = Swift.UInt32
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+  }
+  public let firstName: Swift.String
+  public let lastName: Swift.String
+  public let sex: HealbeSDK.UserPersonalData.Sex
+  public let birthDate: Foundation.Date
+  public let height: Swift.Float
+  public let weight: Swift.Float
+  public let stepLength: Swift.Float
+  public let country: Swift.String
+  public let state: Swift.String?
+  public let city: Swift.String?
+  public init(firstName: Swift.String, lastName: Swift.String, sex: HealbeSDK.UserPersonalData.Sex, birthDate: Foundation.Date, height: Swift.Float, weight: Swift.Float, stepLength: Swift.Float, country: Swift.String, state: Swift.String?, city: Swift.String?)
+  public var age: Swift.Int {
+    get
+  }
+  public var whoRecommendedSleepDurations: (Swift.Int, Swift.Int) {
+    get
+  }
+}
+public struct UnitPreferences : Swift.Equatable {
+  public enum Length : Swift.String, Swift.Codable {
+    case miles
+    case kilometers
+    case centimeters
+    case inches
+    case feetAndInches
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public enum Mass : Swift.String, Swift.Codable {
+    case jin
+    case stonesAndPounds
+    case pounds
+    case kilograms
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public enum Volume : Swift.String, Swift.Codable {
+    case milliliters
+    case fluidOunces
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public let distanceUnit: HealbeSDK.UnitPreferences.Length
+  public let heightUnit: HealbeSDK.UnitPreferences.Length
+  public let weightUnit: HealbeSDK.UnitPreferences.Mass
+  public let glassVolumeUnit: HealbeSDK.UnitPreferences.Volume
+  public init(distanceUnit: HealbeSDK.UnitPreferences.Length, heightUnit: HealbeSDK.UnitPreferences.Length, weightUnit: HealbeSDK.UnitPreferences.Mass, glassVolumeUnit: HealbeSDK.UnitPreferences.Volume)
+  public static func == (a: HealbeSDK.UnitPreferences, b: HealbeSDK.UnitPreferences) -> Swift.Bool
+}
+extension HealbeSDK.UnitPreferences : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct NotificationsPreferences {
+  public let notificationsEnabled: Swift.Bool
+  public let restTimeBeginOffset: Swift.UInt16
+  public let restTimeDuration: Swift.UInt16
+  public init(notificationsEnabled: Swift.Bool, restTimeBeginOffset: Swift.UInt16, restTimeDuration: Swift.UInt16)
+}
+public struct UserPreferences {
+  public let units: HealbeSDK.UnitPreferences
+  public let notifications: HealbeSDK.NotificationsPreferences
+  public let glassVolume: Foundation.Measurement<Foundation.UnitVolume>
+  public let comfortSleepDuration: Swift.UInt16
+  public init(units: HealbeSDK.UnitPreferences, notifications: HealbeSDK.NotificationsPreferences, glassVolume: Foundation.Measurement<Foundation.UnitVolume>, comfortSleepDuration: Swift.UInt16)
+}
+public struct UserModel {
+  public let email: Swift.String
+  public let userUuid: Swift.String
+  public let avatarURLString: Swift.String?
+  public let personalData: HealbeSDK.UserPersonalData
+  public let preferences: HealbeSDK.UserPreferences
+}
+public protocol PublicSDKNetworkManager {
+  func sendSleepEvents(sleepEvents: [HealbeSDK.SleepEventNetwork], callback: @escaping (Swift.Result<Swift.Bool, HealbeSDK.NetError>) -> Swift.Void)
+}
+extension HealbeSDK.StatusCode : Swift.Equatable {}
+extension HealbeSDK.StatusCode : Swift.Hashable {}
+extension HealbeSDK.StatusCode : Swift.RawRepresentable {}
+extension HealbeSDK.SDKStatus : Swift.Equatable {}
+extension HealbeSDK.SDKStatus : Swift.Hashable {}
+extension HealbeSDK.SkinContactStatus : Swift.Hashable {}
+extension HealbeSDK.UpdateFirmState : Swift.Hashable {}
+@available(iOS 13, *)
+extension HealbeSDK.BluetoothPermission : Swift.Equatable {}
+@available(iOS 13, *)
+extension HealbeSDK.BluetoothPermission : Swift.Hashable {}
+extension HealbeSDK.NotificationDataProviderError : Swift.Equatable {}
+extension HealbeSDK.NotificationDataProviderError : Swift.Hashable {}
+extension HealbeSDK.BackgroundConnectSyncState : Swift.Hashable {}
+extension HealbeSDK.WeightSource : Swift.Hashable {}
+extension HealbeSDK.WeightSource : Swift.RawRepresentable {}
+extension HealbeSDK.SleepEventData.DataType : Swift.Hashable {}
+extension HealbeSDK.LogLevel : Swift.Equatable {}
+extension HealbeSDK.LogLevel : Swift.Hashable {}
+extension HealbeSDK.LogLevel : Swift.RawRepresentable {}
+extension HealbeSDK.WeightGoalPlan : Swift.Hashable {}
+extension HealbeSDK.WeightGoalPlan : Swift.RawRepresentable {}
+extension HealbeSDK.WeightGoalStatus : Swift.Hashable {}
+extension HealbeSDK.WeightGoalStatus : Swift.RawRepresentable {}
+extension HealbeSDK.AlarmDay : Swift.CaseIterable {}
+extension HealbeSDK.AlarmDay : Swift.Hashable {}
+extension HealbeSDK.AlarmDay : Swift.RawRepresentable {}
+extension HealbeSDK.AlarmDay : Swift.Equatable {}
+extension HealbeSDK.AlarmEnable : Swift.Equatable {}
+extension HealbeSDK.AlarmEnable : Swift.Hashable {}
+extension HealbeSDK.FirmwareType : Swift.Equatable {}
+extension HealbeSDK.FirmwareType : Swift.Hashable {}
+extension HealbeSDK.FirmwareType : Swift.RawRepresentable {}
+extension HealbeSDK.GoBeNotificationDataType.UrgencyType : Swift.Hashable {}
+extension HealbeSDK.BetData.Trend : Swift.Hashable {}
+extension HealbeSDK.HealbeError.ErrorType : Swift.Equatable {}
+extension HealbeSDK.HealbeError.ErrorType : Swift.Hashable {}
+extension HealbeSDK.HealbeError.ErrorType : Swift.RawRepresentable {}
+extension HealbeSDK.UserPrivateStorageError : Swift.Equatable {}
+extension HealbeSDK.UserPrivateStorageError : Swift.Hashable {}
+extension HealbeSDK.GobeError : Swift.Equatable {}
+extension HealbeSDK.GobeError : Swift.Hashable {}
+extension HealbeSDK.TaskError : Swift.Equatable {}
+extension HealbeSDK.TaskError : Swift.Hashable {}
+extension HealbeSDK.StateError : Swift.Equatable {}
+extension HealbeSDK.StateError : Swift.Hashable {}
+extension HealbeSDK.FileStorageError : Swift.Equatable {}
+extension HealbeSDK.FileStorageError : Swift.Hashable {}
+extension HealbeSDK.FirmwareUpdateError : Swift.Equatable {}
+extension HealbeSDK.FirmwareUpdateError : Swift.Hashable {}
+extension HealbeSDK.AlarmError : Swift.Equatable {}
+extension HealbeSDK.AlarmError : Swift.Hashable {}
+extension HealbeSDK.SyncWeightLogicError : Swift.Hashable {}
+extension HealbeSDK.BackgroundConnetionError : Swift.Equatable {}
+extension HealbeSDK.BackgroundConnetionError : Swift.Hashable {}
+extension HealbeSDK.GobeModel : Swift.Equatable {}
+extension HealbeSDK.GobeModel : Swift.Hashable {}
+extension HealbeSDK.HydrationData.HydrationType : Swift.Equatable {}
+extension HealbeSDK.HydrationData.HydrationType : Swift.Hashable {}
+extension HealbeSDK.SleepIntervalData.IntervalType : Swift.Equatable {}
+extension HealbeSDK.SleepIntervalData.IntervalType : Swift.Hashable {}
+extension HealbeSDK.SleepIntervalData.EndType : Swift.Equatable {}
+extension HealbeSDK.SleepIntervalData.EndType : Swift.Hashable {}
+extension HealbeSDK.SendFilesProgressInfo.ProgressType : Swift.Equatable {}
+extension HealbeSDK.SendFilesProgressInfo.ProgressType : Swift.Hashable {}
+extension HealbeSDK.StressValueType : Swift.Equatable {}
+extension HealbeSDK.StressValueType : Swift.Hashable {}
+extension HealbeSDK.StressValueType : Swift.RawRepresentable {}
+extension HealbeSDK.UrgentGoBeNotificationDataType : Swift.Hashable {}
+extension HealbeSDK.SynchronizationType : Swift.Equatable {}
+extension HealbeSDK.SynchronizationType : Swift.Hashable {}
+extension HealbeSDK.UserPersonalData.Sex : Swift.Equatable {}
+extension HealbeSDK.UserPersonalData.Sex : Swift.Hashable {}
+extension HealbeSDK.UserPersonalData.Sex : Swift.RawRepresentable {}
+extension HealbeSDK.UnitPreferences.Length : Swift.Equatable {}
+extension HealbeSDK.UnitPreferences.Length : Swift.Hashable {}
+extension HealbeSDK.UnitPreferences.Length : Swift.RawRepresentable {}
+extension HealbeSDK.UnitPreferences.Mass : Swift.Equatable {}
+extension HealbeSDK.UnitPreferences.Mass : Swift.Hashable {}
+extension HealbeSDK.UnitPreferences.Mass : Swift.RawRepresentable {}
+extension HealbeSDK.UnitPreferences.Volume : Swift.Equatable {}
+extension HealbeSDK.UnitPreferences.Volume : Swift.Hashable {}
+extension HealbeSDK.UnitPreferences.Volume : Swift.RawRepresentable {}

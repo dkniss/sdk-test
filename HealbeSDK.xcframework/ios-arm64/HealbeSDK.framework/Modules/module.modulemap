@@ -1,0 +1,6 @@
+framework module HealbeSDK {
+  umbrella header "HealbeSDK.h"
+
+  export *
+  module * { export * }
+}

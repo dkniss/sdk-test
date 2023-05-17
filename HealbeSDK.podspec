@@ -11,5 +11,6 @@ Pod::Spec.new do |s|
     s.source            = { :git => 'https://bitbucket.org/Healbe/healbe-public-ios-sdk.git' }
 
     s.ios.deployment_target = '10.0'
-    s.ios.vendored_frameworks = 'HealbeSDK.framework'
+    s.ios.vendored_frameworks = 'HealbeSDK.xcframework'
+    s.preserve_paths = 'HealbeSDK.xcframework'
 end  
